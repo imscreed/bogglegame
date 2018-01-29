@@ -1,12 +1,47 @@
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class Utils {
 
     private List<String> lines;
+    private List<String> words;
+
+    public List<String> importDictionary(){
+        System.out.println("Reading dictionary.....");
+
+        FileReader f = null;
+        try {
+            f = new FileReader("words_en.txt");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        BufferedReader reader = new BufferedReader(f);
+        ArrayList<String> words = new ArrayList<>(150000);
+        do {
+            String line = null;
+            try {
+                line = reader.readLine();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (line == null) {
+                break;
+            }
+            if (line.matches("[a-z]+")) {
+                words.add(line);
+            }
+        } while (true);
+        try {
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return words;
+    }
 
     public BoggleFile readFile(String fileName){
         try {
